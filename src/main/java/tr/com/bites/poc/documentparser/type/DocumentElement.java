@@ -10,10 +10,9 @@ import java.util.HashMap;
  *
  * @author fatihs
  */
-public abstract class DocumentElement<TYPE> {
+public abstract class DocumentElement {
 
     String documentKey = "";
-    TYPE value = null;
     HashMap<String, ElementAttribute> attributeMap = new HashMap<>();
 
     public DocumentElement() {
@@ -24,21 +23,21 @@ public abstract class DocumentElement<TYPE> {
         //TODO:  check if duplaceted key change value;
         attributeMap.put(key, attribute);
     }
-    
-    public void addAttribute(String key,String value) {
+
+    public void addAttribute(String key, String value) {
         //TODO:  check if duplaceted key change value;
-        attributeMap.put(key,new ElementAttribute(key, value));
+        attributeMap.put(key, new ElementAttribute(key, value));
     }
-    
-    public void removeAttribute(String key){
-        if(attributeMap.containsKey(key)) {
+
+    public void removeAttribute(String key) {
+        if (attributeMap.containsKey(key)) {
             attributeMap.remove(key);
         }
     }
-    
-    public DocumentElement(String documentKey, TYPE value) {
-        this.value = value;
-        this.documentKey = documentKey;
+
+    public DocumentElement(String documentElementKey) {
+
+        this.documentKey = documentElementKey;
     }
 
     public class ElementAttribute {

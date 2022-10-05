@@ -11,15 +11,15 @@ import java.lang.annotation.Target;
 public @interface DocumentedField {
 
 	boolean isusedWord() default false;
-	FIELD_TYPE fieldType() default FIELD_TYPE.TEXT;
+	FIELD_TYPE fieldType() default FIELD_TYPE.NONE;
         Class type() ;
         String documentKey() default "";
+        
 	public enum FIELD_TYPE{
 		TEXT,
 		IMAGE,
-		NUMBER,
-                TABLE
-		
+                TABLE,
+		NONE
 	}
 
 }

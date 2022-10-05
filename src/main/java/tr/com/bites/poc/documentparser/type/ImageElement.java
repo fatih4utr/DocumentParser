@@ -4,10 +4,16 @@
  */
 package tr.com.bites.poc.documentparser.type;
 
+import java.awt.image.BufferedImage;
+import tr.com.bites.poc.documentparser.annotation.DocumentAttribute;
+import tr.com.bites.poc.documentparser.annotation.DocumentElementType;
+
 /**
  *
  * @author fatihs
  */
-public class ImageElement {
+@DocumentElementType(parserGroup = "WORD", documentKey = "image",
+        attributes = {@DocumentAttribute(attributeName = "src",defaultValue = "",targetType = BufferedImage.class)})
+public class ImageElement extends  DocumentElement{
     
 }

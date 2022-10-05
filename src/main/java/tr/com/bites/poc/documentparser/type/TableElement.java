@@ -8,6 +8,7 @@ package tr.com.bites.poc.documentparser.type;
  *
  * @author fatihs
  */
+
 public class TableElement {
     
 }

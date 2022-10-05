@@ -18,6 +18,26 @@ public abstract  class AbstractDocumentParser {
     File tempFile; 
     File targetFile;
     List<DocumentParserListener > listeners = new ArrayList<>();
+
+    public AbstractDocumentParser() {
+    }
+
+    
+    
+    public AbstractDocumentParser(File tempFile) {
+        this.tempFile = tempFile;
+    }
+    
+    
+    
+    
+    public void setTargetFile(File targetFile) {
+        this.targetFile = targetFile;
+    }
+    
+    public void setTempFile(File tempFile) {
+        this.tempFile = tempFile;
+    }
     
     public abstract boolean parseDocument();
     

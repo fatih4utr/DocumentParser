@@ -4,10 +4,17 @@
  */
 package tr.com.bites.poc.documentparser.type;
 
+import java.awt.Font;
+import tr.com.bites.poc.documentparser.annotation.DocumentAttribute;
+import tr.com.bites.poc.documentparser.annotation.DocumentElementType;
+
 /**
  *
  * @author fatihs
  */
-public class TextElement {
+
+@DocumentElementType(parserGroup = "WORD", documentKey = "text",
+        attributes = {@DocumentAttribute(attributeName = "font",defaultValue = "",targetType = Font.class)})
+public class TextElement extends DocumentElement{
     
 }

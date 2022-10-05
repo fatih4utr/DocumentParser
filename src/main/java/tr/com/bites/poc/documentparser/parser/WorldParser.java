@@ -4,6 +4,7 @@
  */
 package tr.com.bites.poc.documentparser.parser;
 
+import java.io.File;
 import java.util.HashMap;
 import tr.com.bites.poc.documentparser.type.DocumentElement;
 
@@ -13,6 +14,12 @@ import tr.com.bites.poc.documentparser.type.DocumentElement;
  */
 public class WorldParser  extends AbstractDocumentParser{
 
+    public WorldParser() {
+    }
+    
+    
+    
+    
     @Override
     public boolean parseDocument() {
         HashMap<String , ? extends  DocumentElement> keyDocumentElementMap = new HashMap<>();
