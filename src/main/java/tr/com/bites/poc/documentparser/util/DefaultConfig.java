@@ -10,13 +10,11 @@ import tr.com.bites.poc.documentparser.annotation.ConfigService;
  *
  * @author fatihs
  */
-
-@ConfigService.SearchPathConfig(parserSearchPaths = ("tr.com.bites.poc.documentparser.parser"))
+@ConfigService.SearchPathConfig(
+        parserSearchPaths = ("tr.com.bites.poc.documentparser.parser"),
+        documentElementsSearchPaths = ("tr.com.bites.poc.documentparser.element")
+)
 @ConfigService.Parser(activeParsers = "WORD")
-public class DefaultConfig {
-   public enum CONFIGS {
-       PARSER_SEARCH_PATHS,
-       ACTIVE_PARSERS
-   }
-   
+public abstract class DefaultConfig {
+    
 }

@@ -6,9 +6,10 @@ package tr.com.bites.poc.documentparser.parser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import tr.com.bites.poc.documentparser.type.DocumentElement;
+import tr.com.bites.poc.documentparser.element.DocumentElement;
 
 /**
  *
@@ -18,10 +19,13 @@ public abstract  class AbstractDocumentParser {
     File tempFile; 
     File targetFile;
     List<DocumentParserListener > listeners = new ArrayList<>();
-
+    HashMap<String, DocumentElement> elementKeyMap = new HashMap<>();
+    
+    
+    
     public AbstractDocumentParser() {
     }
-
+    
     
     
     public AbstractDocumentParser(File tempFile) {
@@ -29,7 +33,12 @@ public abstract  class AbstractDocumentParser {
     }
     
     
-    
+    public void addDocumentElement(DocumentElement element) {
+        if(!elementKeyMap.containsKey(element.getDocumentKey())){
+            elementKeyMap.put(element.getDocumentKey(), element);
+        }
+        //TODO change;
+    }
     
     public void setTargetFile(File targetFile) {
         this.targetFile = targetFile;

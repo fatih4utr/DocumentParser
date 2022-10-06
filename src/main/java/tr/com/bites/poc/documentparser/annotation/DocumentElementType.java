@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
 public @interface DocumentElementType {
     String parserGroup() default "";
     String documentKey() default "";
-    DocumentAttribute [] attributes() ;
+    DocumentAttribute [] attributes() default {};
     
 }

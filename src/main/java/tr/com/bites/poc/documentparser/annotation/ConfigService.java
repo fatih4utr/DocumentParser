@@ -20,7 +20,8 @@ public @interface ConfigService {
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface SearchPathConfig{
-        String[] parserSearchPaths();
+        String[] parserSearchPaths() default {};
+        String[] documentElementsSearchPaths() default {};
     }
     
     @Target(ElementType.TYPE)

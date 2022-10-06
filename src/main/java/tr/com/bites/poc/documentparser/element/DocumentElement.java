@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package tr.com.bites.poc.documentparser.type;
+package tr.com.bites.poc.documentparser.element;
 
 import java.util.HashMap;
 
@@ -35,6 +35,14 @@ public abstract class DocumentElement {
         }
     }
 
+    public String getDocumentKey() {
+        return documentKey;
+    }
+
+    public void setDocumentKey(String documentKey) {
+        this.documentKey = documentKey;
+    }
+    
     public DocumentElement(String documentElementKey) {
 
         this.documentKey = documentElementKey;
@@ -44,7 +52,8 @@ public abstract class DocumentElement {
 
         String key;
         String value;
-
+        Class type;
+        
         public ElementAttribute() {
         }
 
@@ -53,6 +62,21 @@ public abstract class DocumentElement {
             this.value = value;
         }
 
+        public ElementAttribute(String key, String value, Class type) {
+            this.key = key;
+            this.value = value;
+            this.type = type;
+        }
+
+        public Class getType() {
+            return type;
+        }
+
+        public void setType(Class type) {
+            this.type = type;
+        }
+        
+        
         public String getKey() {
             return key;
         }
