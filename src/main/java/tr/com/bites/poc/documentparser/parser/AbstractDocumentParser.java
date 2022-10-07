@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import tr.com.bites.poc.documentparser.element.DocumentElement;
+import tr.com.bites.poc.documentparser.element.AbstractDocumentElement;
 
 /**
  *
@@ -19,7 +19,7 @@ public abstract  class AbstractDocumentParser {
     File tempFile; 
     File targetFile;
     List<DocumentParserListener > listeners = new ArrayList<>();
-    HashMap<String, DocumentElement> elementKeyMap = new HashMap<>();
+    HashMap<String, AbstractDocumentElement> elementKeyMap = new HashMap<>();
     
     
     
@@ -33,7 +33,7 @@ public abstract  class AbstractDocumentParser {
     }
     
     
-    public void addDocumentElement(DocumentElement element) {
+    public void addDocumentElement(AbstractDocumentElement element) {
         if(!elementKeyMap.containsKey(element.getDocumentKey())){
             elementKeyMap.put(element.getDocumentKey(), element);
         }
@@ -58,7 +58,7 @@ public abstract  class AbstractDocumentParser {
         this.listeners.remove(listener);
     }
     
-    protected void notifyOnSucces(Map<String , ?  extends DocumentElement> keyTypeMap){
+    protected void notifyOnSucces(Map<String , ? extends  AbstractDocumentElement> keyTypeMap){
         for (DocumentParserListener listener : listeners){
             listener.onSuccess(keyTypeMap);
         }
@@ -72,6 +72,6 @@ public abstract  class AbstractDocumentParser {
     
     public interface DocumentParserListener {
         void onError(String errorMsg);
-        void onSuccess(Map<String , ?  extends DocumentElement> keyTypeMap);
+        void onSuccess(Map<String , ? extends  AbstractDocumentElement> keyTypeMap);
     }
 }

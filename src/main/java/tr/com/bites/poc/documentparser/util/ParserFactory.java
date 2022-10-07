@@ -5,8 +5,9 @@
 package tr.com.bites.poc.documentparser.util;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import tr.com.bites.poc.documentparser.annotation.ParserService;
 import tr.com.bites.poc.documentparser.parser.AbstractDocumentParser;
 
 /**
@@ -20,14 +21,14 @@ public class ParserFactory {
     private ParserFactory() {
     }
 
-    public synchronized ParserFactory getDefault() {
+    public static synchronized ParserFactory getDefault() {
         if (def == null) {
             def = new ParserFactory();
         }
         return def;
     }
 
-    public AbstractDocumentParser createParser(File tempFile) {
+    public AbstractDocumentParser selectParser(File tempFile, HashMap<String, AbstractDocumentParser> activeParsers) {
         if (! !tempFile.exists()) {
             // TODO error;
             return null;
@@ -37,16 +38,37 @@ public class ParserFactory {
             // TODO error;
             return null;
         }
-        
-        //TODO extentetion Check 
-        //String tempFileExtention =  
+        for (Map.Entry<String, AbstractDocumentParser> entry : activeParsers.entrySet()) {
+            String key = entry.getKey();
+            AbstractDocumentParser parser = entry.getValue();
+            if(checkParserSupportedFileExtention(tempFile, parser)){
+                return parser;
+            }
+        }
         
         
         return null;
     }
 
-    public AbstractDocumentParser createParser(String tempFilePath) {
-        return createParser(new File(tempFilePath));
+    private boolean checkParserSupportedFileExtention(File tempFile, AbstractDocumentParser parser) {
+
+        ParserService annotation = parser.getClass().getAnnotation(ParserService.class);
+        
+
+        String[] fileExtentions = annotation.fileExtention();
+        String tempfileExtention = tempFile.getAbsolutePath().substring(tempFile.getAbsolutePath().lastIndexOf("."));
+        
+        for (String fileExtention : fileExtentions) {
+            if(fileExtention.equals(tempfileExtention)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public AbstractDocumentParser selectParser(String tempFilePath, HashMap<String, AbstractDocumentParser> activeParsers) {
+        return selectParser(new File(tempFilePath), activeParsers);
+
     }
 
 }

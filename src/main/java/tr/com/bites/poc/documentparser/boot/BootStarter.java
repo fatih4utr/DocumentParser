@@ -21,11 +21,13 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 import javax.swing.text.Document;
 import tr.com.bites.poc.documentparser.annotation.ConfigService;
+import tr.com.bites.poc.documentparser.annotation.DocumentAttribute;
 import tr.com.bites.poc.documentparser.annotation.DocumentElementType;
 import tr.com.bites.poc.documentparser.annotation.ParserService;
-import tr.com.bites.poc.documentparser.element.DocumentElement;
+import tr.com.bites.poc.documentparser.element.AbstractDocumentElement;
 import tr.com.bites.poc.documentparser.parser.AbstractDocumentParser;
 import tr.com.bites.poc.documentparser.util.DefaultConfig;
+import tr.com.bites.poc.documentparser.util.ParserFactory;
 
 /**
  *
@@ -35,7 +37,8 @@ public class BootStarter {
 
     private static HashMap< CONFIGS, Object> configsMap = new HashMap<>();
     private static HashMap<String, AbstractDocumentParser> activeParsers = new HashMap<>();
-
+    private static AbstractDocumentParser currentParser =null;
+    
     //TODO check outter service 
     public static void prepare(Class argClass) {
         //Load default and custon Configs;
@@ -43,30 +46,77 @@ public class BootStarter {
         reflectParsers();
         //  Reflection Parsers;
         generateDocumentElements();
-
+        
+        
+    }
+    
+    public static  void parse(File tempFile){
+        currentParser = ParserFactory.getDefault().selectParser(tempFile, activeParsers);
+        if(currentParser == null) {
+            //TODO Fire error
+            return;
+        }
+        
     }
 
     private static void generateDocumentElements() {
 
         List<String> elementSearchList = (List<String>) configsMap.get(CONFIGS.DOCUMENT_ELEMENTS_SEARCH_PATHS);
-        HashMap<Class<? extends DocumentElement>, DocumentElementType> elementAnnotationMap = new HashMap<>();
+        HashMap<Class<?>, DocumentElementType> elementAnnotationMap = new HashMap<>();
+
         for (String path : elementSearchList) {
             List<String> classListFromSearchPath = getClassListFromSearchPath(path);
             for (String elementPath : classListFromSearchPath) {
-                Class<?> loadedClass = loadClassFromName(elementPath, DocumentElement.class, DocumentElementType.class);
+                Class<?> loadedClass = loadClassFromName(elementPath, AbstractDocumentElement.class, DocumentElementType.class);
                 if (loadedClass == null) {
                     continue;
                 }
-                System.out.println("tr.com.bites.poc.documentparser.boot.BootStarter.generateDocumentElements() " + loadedClass.getCanonicalName());
+
+                if (!loadedClass.isAnnotationPresent(DocumentElementType.class)
+                        || !AbstractDocumentElement.class.isAssignableFrom(loadedClass)) {
+                    continue;
+                }
+                DocumentElementType annotation = loadedClass.getAnnotation(DocumentElementType.class);
+                elementAnnotationMap.put(loadedClass, annotation);
             }
         }
 
         for (Map.Entry<String, AbstractDocumentParser> entry : activeParsers.entrySet()) {
             String key = entry.getKey();
-            AbstractDocumentParser value = entry.getValue();
+            AbstractDocumentParser parser = entry.getValue();
 
+            for (Map.Entry<Class<?>, DocumentElementType> documentElementEntry : elementAnnotationMap.entrySet()) {
+                Class<?> elementClass = documentElementEntry.getKey();
+                DocumentElementType annotation = documentElementEntry.getValue();
+                if (key.equals(annotation.parserGroup())) {
+                    AbstractDocumentElement element = generateElementAttributes(annotation, elementClass);
+                    System.out.println(element);
+                    
+                    parser.addDocumentElement(element);
+                    
+                }
+            }
+        }
+        
+    }
+
+    private static AbstractDocumentElement generateElementAttributes(DocumentElementType annotation, Class documentElementType) {
+        DocumentAttribute[] attributes = annotation.attributes();
+
+        AbstractDocumentElement object = (AbstractDocumentElement) reflectFromClass(documentElementType, null, null);
+        object.setDocumentKey(annotation.documentKey());
+
+        if (attributes == null || attributes.length == 0) {
+            return object;
         }
 
+        for (DocumentAttribute attribute : attributes) {
+            AbstractDocumentElement.ElementAttribute att
+                    = new AbstractDocumentElement.ElementAttribute(attribute.attributeName(), attribute.defaultValue(), attribute.targetType());
+            object.addAttribute(att);
+        }
+
+        return object;
     }
 
     private static List<String> getClassListFromSearchPath(String searchPath) {
@@ -144,7 +194,7 @@ public class BootStarter {
                     return null;
                 }
             }
-            
+
             if (!typeClass.isAssignableFrom(loadedClass)) {
                 //TODO extends error not correct 
                 return null;

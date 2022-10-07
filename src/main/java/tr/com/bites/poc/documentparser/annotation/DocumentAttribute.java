@@ -15,10 +15,10 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.ANNOTATION_TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-
 public @interface DocumentAttribute {
     String attributeName() ;
     String defaultValue() ;
+    boolean must() default false;
     Class targetType ();
     
 }

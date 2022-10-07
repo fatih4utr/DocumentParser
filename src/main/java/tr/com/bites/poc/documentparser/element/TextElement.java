@@ -14,7 +14,7 @@ import tr.com.bites.poc.documentparser.annotation.DocumentElementType;
  */
 
 @DocumentElementType(parserGroup = "WORD", documentKey = "text",
-        attributes = {@DocumentAttribute(attributeName = "font",defaultValue = "",targetType = Font.class)})
-public class TextElement extends DocumentElement{
+        attributes = {@DocumentAttribute(attributeName = "font",defaultValue = "12",targetType = Font.class)})
+public class TextElement extends AbstractDocumentElement{
     
 }

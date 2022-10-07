@@ -16,6 +16,6 @@ import tr.com.bites.poc.documentparser.annotation.DocumentElementType;
         attributes = {
             @DocumentAttribute(attributeName = "src",defaultValue = "",targetType = BufferedImage.class)
         })
-public class ImageElement extends  DocumentElement{
+public class ImageElement extends  AbstractDocumentElement{
     
 }

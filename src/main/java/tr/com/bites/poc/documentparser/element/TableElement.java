@@ -14,6 +14,6 @@ import tr.com.bites.poc.documentparser.annotation.DocumentElementType;
  */
 @DocumentElementType(parserGroup = "WORD", documentKey = "table",
         attributes = {@DocumentAttribute(attributeName = "columnSize",defaultValue = "",targetType = Integer.class)})
-public class TableElement extends DocumentElement{
+public class TableElement extends AbstractDocumentElement{
     
 }
