@@ -8,24 +8,27 @@ import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
-import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
-import javax.swing.text.Document;
+import javax.swing.JFrame;
 import tr.com.bites.poc.documentparser.annotation.ConfigService;
 import tr.com.bites.poc.documentparser.annotation.DocumentAttribute;
 import tr.com.bites.poc.documentparser.annotation.DocumentElementType;
 import tr.com.bites.poc.documentparser.annotation.ParserService;
+import tr.com.bites.poc.documentparser.document.TempDocument;
 import tr.com.bites.poc.documentparser.element.AbstractDocumentElement;
+import tr.com.bites.poc.documentparser.gui.DocumentEditorPanel;
 import tr.com.bites.poc.documentparser.parser.AbstractDocumentParser;
+import tr.com.bites.poc.documentparser.parser.generator.AbstractGenerator;
 import tr.com.bites.poc.documentparser.util.DefaultConfig;
 import tr.com.bites.poc.documentparser.util.ParserFactory;
 
@@ -37,8 +40,8 @@ public class BootStarter {
 
     private static HashMap< CONFIGS, Object> configsMap = new HashMap<>();
     private static HashMap<String, AbstractDocumentParser> activeParsers = new HashMap<>();
-    private static AbstractDocumentParser currentParser =null;
-    
+    private static AbstractDocumentParser currentParser = null;
+
     //TODO check outter service 
     public static void prepare(Class argClass) {
         //Load default and custon Configs;
@@ -46,17 +49,63 @@ public class BootStarter {
         reflectParsers();
         //  Reflection Parsers;
         generateDocumentElements();
-        
-        
     }
-    
-    public static  void parse(File tempFile){
+
+    public static HashMap<String, AbstractDocumentParser> getActiveParsers() {
+        return activeParsers;
+    }
+
+    public static String[] getActiveParsersExtentions() {
+        List<String> list = new ArrayList<>();
+
+        for (Map.Entry<String, AbstractDocumentParser> entry : activeParsers.entrySet()) {
+            String key = entry.getKey();
+            AbstractDocumentParser value = entry.getValue();
+
+            ParserService annotation = value.getClass().getAnnotation(ParserService.class);
+            String[] fileExtention = annotation.fileExtention();
+            List<String> asList = Arrays.asList(fileExtention);
+            list.addAll(asList);
+        }
+
+        if (!list.isEmpty()) {
+            String[] ext = null;
+            ext = new String[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                ext[i] = list.get(i);
+            }
+            return ext;
+        }
+
+        return null;
+    }
+
+    public static void parse(File tempFile) {
         currentParser = ParserFactory.getDefault().selectParser(tempFile, activeParsers);
-        if(currentParser == null) {
+        if (currentParser == null) {
             //TODO Fire error
             return;
         }
-        
+        TempDocument tempDocument = currentParser.parseDocument();
+
+    }
+
+    public static AbstractDocumentParser getCurrentParser() {
+        return currentParser;
+    }
+
+    public static void start() {
+        JFrame frame = new JFrame();
+        frame.setSize(700, 700);
+        DocumentEditorPanel panel = new DocumentEditorPanel();
+        panel.initPanel();
+        frame.add(panel);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
+    }
+
+    public static void save(File targetFile) {
+
     }
 
     private static void generateDocumentElements() {
@@ -91,13 +140,13 @@ public class BootStarter {
                 if (key.equals(annotation.parserGroup())) {
                     AbstractDocumentElement element = generateElementAttributes(annotation, elementClass);
                     System.out.println(element);
-                    
+
                     parser.addDocumentElement(element);
-                    
+
                 }
             }
         }
-        
+
     }
 
     private static AbstractDocumentElement generateElementAttributes(DocumentElementType annotation, Class documentElementType) {
@@ -161,9 +210,13 @@ public class BootStarter {
                     continue;
                 }
                 ParserService parserAnnotation = parserClass.getAnnotation(ParserService.class);
-                AbstractDocumentParser reflectFromClass = (AbstractDocumentParser) reflectFromClass(parserClass, null, null);
+                AbstractDocumentParser reflectedParser = (AbstractDocumentParser) reflectFromClass(parserClass, null, null);
                 if (activeParserList.contains(parserAnnotation.parserGroup())) {
-                    BootStarter.activeParsers.put(parserAnnotation.parserGroup(), reflectFromClass);
+                    Class<? extends AbstractGenerator> generatorClass = parserAnnotation.generator();
+                    AbstractGenerator generator = (AbstractGenerator) reflectFromClass(generatorClass, null, null);
+                    reflectedParser.setGenerator(generator);
+                    BootStarter.activeParsers.put(parserAnnotation.parserGroup(), reflectedParser);
+
                 }
             }
 

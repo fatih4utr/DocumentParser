@@ -12,13 +12,14 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import tr.com.bites.poc.documentparser.parser.generator.AbstractGenerator;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 
 public @interface ParserService {
     String [] fileExtention();
-    
     String parserGroup() default "";
+    Class<? extends AbstractGenerator> generator();
     
 }

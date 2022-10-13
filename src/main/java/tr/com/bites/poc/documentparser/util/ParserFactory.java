@@ -29,7 +29,7 @@ public class ParserFactory {
     }
 
     public AbstractDocumentParser selectParser(File tempFile, HashMap<String, AbstractDocumentParser> activeParsers) {
-        if (! !tempFile.exists()) {
+        if (! tempFile.exists()) {
             // TODO error;
             return null;
 
@@ -42,6 +42,8 @@ public class ParserFactory {
             String key = entry.getKey();
             AbstractDocumentParser parser = entry.getValue();
             if(checkParserSupportedFileExtention(tempFile, parser)){
+                parser.setTempFile(tempFile);
+                
                 return parser;
             }
         }
@@ -56,7 +58,8 @@ public class ParserFactory {
         
 
         String[] fileExtentions = annotation.fileExtention();
-        String tempfileExtention = tempFile.getAbsolutePath().substring(tempFile.getAbsolutePath().lastIndexOf("."));
+        String tempfileExtention = tempFile.getAbsolutePath().substring(tempFile.getAbsolutePath().lastIndexOf(".")).
+                substring(1);
         
         for (String fileExtention : fileExtentions) {
             if(fileExtention.equals(tempfileExtention)){

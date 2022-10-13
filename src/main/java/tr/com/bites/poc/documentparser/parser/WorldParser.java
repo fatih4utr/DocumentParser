@@ -5,21 +5,27 @@
 package tr.com.bites.poc.documentparser.parser;
 
 import tr.com.bites.poc.documentparser.annotation.ParserService;
+import tr.com.bites.poc.documentparser.document.TempDocument;
+import tr.com.bites.poc.documentparser.parser.generator.poi.ApachePoiWordGenerator;
 
 /**
  *
  * @author fatihs
  */
-@ParserService(fileExtention = {"doc","docx"},parserGroup = "WORD")
+@ParserService(fileExtention = {"doc", "docx"}, parserGroup = "WORD",generator = ApachePoiWordGenerator.class)
 public class WorldParser extends AbstractDocumentParser {
-
+    
     public WorldParser() {
+        
     }
-
+    
     @Override
-    public boolean parseDocument() {
+    public TempDocument parseDocument() {
 
-        return false;
+        if (tempDocument == null) {
+            this.notifyOnParseSucces(this.tempDocument);
+            return null;
+        }
+        return tempDocument;
     }
-
 }
