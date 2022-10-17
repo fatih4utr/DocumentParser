@@ -29,7 +29,7 @@ public class DocumentEditorPanel extends JPanel implements AbstractDocumentParse
     private File targetFile = null;
 
     private TempFileInfoPanel pnlTempFileInfo;
-    private CustomPanel pnlParsedElements;
+    private ParsedElementPanel pnlParsedElements;
     private CustomPanel pnlObjectElements;
     private CustomPanel pnlSelections;
     private CustomPanel pnlStatucBar;
@@ -41,7 +41,7 @@ public class DocumentEditorPanel extends JPanel implements AbstractDocumentParse
         this.setLayout(new BorderLayout());
         this.setSize(500, 500);
         pnlObjectElements = new CustomPanel(Color.yellow);
-        pnlParsedElements = new CustomPanel(Color.RED);
+        pnlParsedElements = new ParsedElementPanel();
         pnlSelections = new CustomPanel(Color.BLUE);
         pnlTempFileInfo = new TempFileInfoPanel();
         pnlStatucBar = new CustomPanel(Color.GREEN);

@@ -18,17 +18,21 @@ public class TempFileInfoPanel extends javax.swing.JPanel {
      */
     public TempFileInfoPanel() {
         initComponents();
+
+    }
+
+    public void setTempFile(TempDocument document) {
+        this.lblPathValue.setText(document.getAbsolutePath());
         
+        long size =  (document.length() / 1024);
+        
+        this.lblSize.setText("Size :" + size + " Kb");
     }
-    
-    public void setTempFile(TempDocument document){
-        this.lblPathValue .setText(document.getAbsolutePath());
-    }
-    
+
     public JButton getBtnOpenTempFile() {
         return btnOpenTempFile;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,32 +42,56 @@ public class TempFileInfoPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        pnlFileSelect = new javax.swing.JPanel();
         lblFilePath = new javax.swing.JLabel();
         lblPathValue = new javax.swing.JLabel();
         btnOpenTempFile = new javax.swing.JButton();
+        pnlInfo = new javax.swing.JPanel();
+        lblSize = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        pnlFileSelect.setLayout(new java.awt.BorderLayout());
 
         lblFilePath.setText("File Path : ");
-        jPanel1.add(lblFilePath, java.awt.BorderLayout.WEST);
+        pnlFileSelect.add(lblFilePath, java.awt.BorderLayout.WEST);
 
         lblPathValue.setText("...");
-        jPanel1.add(lblPathValue, java.awt.BorderLayout.CENTER);
+        pnlFileSelect.add(lblPathValue, java.awt.BorderLayout.CENTER);
 
         btnOpenTempFile.setText("Open Temp File");
-        jPanel1.add(btnOpenTempFile, java.awt.BorderLayout.EAST);
+        pnlFileSelect.add(btnOpenTempFile, java.awt.BorderLayout.EAST);
 
-        add(jPanel1, java.awt.BorderLayout.CENTER);
+        add(pnlFileSelect, java.awt.BorderLayout.NORTH);
+
+        lblSize.setText("Size :");
+
+        javax.swing.GroupLayout pnlInfoLayout = new javax.swing.GroupLayout(pnlInfo);
+        pnlInfo.setLayout(pnlInfoLayout);
+        pnlInfoLayout.setHorizontalGroup(
+            pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlInfoLayout.createSequentialGroup()
+                .addComponent(lblSize, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 568, Short.MAX_VALUE))
+        );
+        pnlInfoLayout.setVerticalGroup(
+            pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblSize)
+                .addContainerGap(52, Short.MAX_VALUE))
+        );
+
+        add(pnlInfo, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOpenTempFile;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblFilePath;
     private javax.swing.JLabel lblPathValue;
+    private javax.swing.JLabel lblSize;
+    private javax.swing.JPanel pnlFileSelect;
+    private javax.swing.JPanel pnlInfo;
     // End of variables declaration//GEN-END:variables
 }
