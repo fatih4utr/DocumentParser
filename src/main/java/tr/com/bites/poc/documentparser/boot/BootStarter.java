@@ -161,7 +161,7 @@ public class BootStarter {
 
         for (DocumentAttribute attribute : attributes) {
             AbstractDocumentElement.ElementAttribute att
-                    = new AbstractDocumentElement.ElementAttribute(attribute.attributeName(), attribute.defaultValue(), attribute.targetType());
+                    = new AbstractDocumentElement.ElementAttribute(attribute.attributeName(), attribute.targetType());
             object.addAttribute(att);
         }
 
@@ -213,8 +213,8 @@ public class BootStarter {
                 AbstractDocumentParser reflectedParser = (AbstractDocumentParser) reflectFromClass(parserClass, null, null);
                 if (activeParserList.contains(parserAnnotation.parserGroup())) {
                     Class<? extends AbstractGenerator> generatorClass = parserAnnotation.generator();
-                    AbstractGenerator generator = (AbstractGenerator) reflectFromClass(generatorClass, null, null);
-                    reflectedParser.setGenerator(generator);
+                    
+                    reflectedParser.setGeneratorClass(generatorClass);
                     BootStarter.activeParsers.put(parserAnnotation.parserGroup(), reflectedParser);
 
                 }
@@ -253,16 +253,12 @@ public class BootStarter {
                 return null;
             }
             return loadedClass;
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BootStarter.class.getName()).log(Level.SEVERE, null, ex);
-
-        } catch (SecurityException ex) {
-            Logger.getLogger(BootStarter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(BootStarter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | SecurityException | IllegalArgumentException ex) {
+            //Logger.getLogger(BootStarter.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
 
-        return null;
+        
     }
 
     private static void fillSearchPathFromConfig(Class argClass, CONFIGS pathConfig) {

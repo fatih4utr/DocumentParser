@@ -14,7 +14,9 @@ import tr.com.bites.poc.documentparser.annotation.DocumentElementType;
  */
 @DocumentElementType(parserGroup = "WORD", documentKey = "image",
         attributes = {
-            @DocumentAttribute(attributeName = "src",defaultValue = "",targetType = BufferedImage.class)
+            @DocumentAttribute(attributeName = "src",defaultValue = "",targetType = BufferedImage.class),
+            @DocumentAttribute(attributeName = "width",defaultValue = "",targetType = Integer.class),
+            
         })
 public class ImageElement extends  AbstractDocumentElement{
     

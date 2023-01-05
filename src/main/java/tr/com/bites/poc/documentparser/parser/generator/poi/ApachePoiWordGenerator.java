@@ -7,21 +7,42 @@ package tr.com.bites.poc.documentparser.parser.generator.poi;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import tr.com.bites.poc.documentparser.element.ParsedElement;
 import tr.com.bites.poc.documentparser.parser.generator.AbstractGenerator;
 
 /**
  *
  * @author fatihs
  */
-public class ApachePoiWordGenerator extends AbstractGenerator<PoiTempDocument,PoiTargetDocument> {
-    
+public class ApachePoiWordGenerator extends AbstractGenerator<PoiTempDocument, PoiTargetDocument> {
+
     @Override
     public void start() {
+        XWPFWordExtractor extractor = new XWPFWordExtractor(tempDocument.getGeneratorDocumentType());
+        String text = extractor.getText();
+
+        String startPattern = Pattern.quote("${");
+        String endPattern = Pattern.quote("}");
+        Pattern pattern = Pattern.compile(startPattern + "(.*?)" + endPattern);
+        Matcher matcher = pattern.matcher(text);
+
+        Pattern patternAtt = Pattern.compile(startPattern + "(.*?)" + endPattern);
+        
+        
+        while (matcher.find()) {
+            String group = matcher.group();
+            System.out.println("grouo  : "+ group);
+            ParsedElement parsedElement= ParsedElementFactory.createParsedElement(group);
+            this.tempDocument.addParsedElement(parsedElement);
+        }
         
     }
-    
+
     private void editParagraphWithData(XWPFParagraph paragraph, String surroundedTag, String replacement) {
         List<Integer> runsToRemove = new LinkedList<Integer>();
         StringBuilder tmpText = new StringBuilder();

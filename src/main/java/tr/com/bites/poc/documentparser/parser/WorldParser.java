@@ -12,15 +12,18 @@ import tr.com.bites.poc.documentparser.parser.generator.poi.ApachePoiWordGenerat
  *
  * @author fatihs
  */
-@ParserService(fileExtention = {"doc", "docx"}, parserGroup = "WORD",generator = ApachePoiWordGenerator.class)
+@ParserService(fileExtention = {"doc", "docx"}, parserGroup = "WORD", generator = ApachePoiWordGenerator.class)
 public class WorldParser extends AbstractDocumentParser {
+
     
-    public WorldParser() {
-        
-    }
-    
+
     @Override
     public TempDocument parseDocument() {
+        if (this.generator != null) {
+            generator.start();
+        } else {
+            System.out.println("tr.com.bites.poc.documentparser.parser.WorldParser.parseDocument() " + null);
+        }
 
         if (tempDocument == null) {
             this.notifyOnParseSucces(this.tempDocument);

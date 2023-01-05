@@ -12,15 +12,15 @@ import tr.com.bites.poc.documentparser.document.TempDocument;
  *
  * @author fatihs
  */
-public class PoiTargetDocument extends TargetDocument<String> {
+public class PoiTargetDocument extends TargetDocument<XWPFDocument> {
 
     public PoiTargetDocument(String path) {
         super(path);
     }
-
     
     @Override
     public void save() {
     }
+    
     
 }

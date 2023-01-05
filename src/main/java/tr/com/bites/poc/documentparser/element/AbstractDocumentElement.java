@@ -13,15 +13,14 @@ import java.util.Map;
  */
 public abstract class AbstractDocumentElement {
 
-    String documentKey = "";
-    
-    HashMap<String, ElementAttribute> attributeMap = new HashMap<>();
+    private String documentKey = "";
+    private HashMap<String, ElementAttribute> attributeMap = new HashMap<>();
 
     public AbstractDocumentElement() {
-        ElementAttribute attribute = new ElementAttribute("name", "", String.class);
-        attributeMap.put(attribute.key,attribute);
+        ElementAttribute attribute = new ElementAttribute("name", String.class);
+        attributeMap.put(attribute.key, attribute);
     }
-    
+
     public void addAttribute(String key, ElementAttribute attribute) {
         //TODO:  check if duplaceted key change value;
         attributeMap.put(key, attribute);
@@ -33,7 +32,7 @@ public abstract class AbstractDocumentElement {
 
     public void addAttribute(String key, String value) {
         //TODO:  check if duplaceted key change value;
-        attributeMap.put(key, new ElementAttribute(key, value));
+        attributeMap.put(key, new ElementAttribute(key));
     }
 
     public void removeAttribute(String key) {
@@ -54,35 +53,36 @@ public abstract class AbstractDocumentElement {
 
         this.documentKey = documentElementKey;
     }
-
+    
+    public HashMap<String, ElementAttribute> getAttributeMap() {
+        return attributeMap;
+    }
+    
     @Override
     public String toString() {
-        String value = "- "+ this.documentKey + "\n";
+        String value = "- " + this.documentKey + "\n";
         for (Map.Entry<String, ElementAttribute> entry : attributeMap.entrySet()) {
             Object key = entry.getKey();
             Object att = entry.getValue();
-            value+=att.toString() + "\n";
+            value += att.toString() + "\n";
         }
         return value;
     }
-    
+
     public static class ElementAttribute {
-
-        String key;
-        String value;
-        Class type;
-
+        
+        private String key;
+        private Class type;
+        
         public ElementAttribute() {
         }
 
-        public ElementAttribute(String key, String value) {
+        public ElementAttribute(String key) {
             this.key = key;
-            this.value = value;
         }
 
-        public ElementAttribute(String key, String value, Class type) {
+        public ElementAttribute(String key, Class type) {
             this.key = key;
-            this.value = value;
             this.type = type;
         }
 
@@ -102,19 +102,11 @@ public abstract class AbstractDocumentElement {
             this.key = key;
         }
 
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-
         @Override
         public String toString() {
-            return "-- " + this.key + " - " + this.value + " - " + this.type.toString();
+            return "-- " + this.key + " - " + " - " + this.type.toString();
         }
-        
+
     }
 
 }

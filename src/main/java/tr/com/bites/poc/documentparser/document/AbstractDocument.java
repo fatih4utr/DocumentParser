@@ -13,7 +13,7 @@ import java.io.File;
  */
 public abstract class AbstractDocument<TYPE> extends File {
 
-    private TYPE generatorDocumentType = null;
+    protected TYPE generatorDocumentType = null;
 
     public AbstractDocument(String path) {
         super(path);
